@@ -1,26 +1,55 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+<nav>
+    <img src="images/Favicon.png">
+    <h1 v-text="sitename"></h1>
+   <!--Search Bar-->
+    <div class="search-bar" >
+        <input type="text" placeholder="Search" v-model.trim="search" @input="customSearch" />
+    </div>
+   <!--Checkout Button-->
+   <button class="checkout-button" v-on:click="showCheckout" v-bind:disabled="isCartEmpty">
+        <span v-if="!showCheckoutPage" >
+               {{ cartItemCount}}
+               <span class="fas fa-cart-plus" ></span>
+                    Checkout
+               </span>
+               <span v-else>
+                    <span class="fas fa-home" ></span>
+                    Home
+       </span>
+   </button>
+   </nav>
+   <main>
+      <div v-if="!showCheckoutPage" >
+        <Lesson/>    
+      </div>
+
+    <div v-else>
+      <Checkout/>
+    </div>
+
+   </main>
+    <br><br>
+<footer>
+    <!-- Footer content -->
+    <h1 >SABA SHAIKH M00850503</h1>
+</footer>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Checkout from './components/Checkout.vue'
+import Lesson from './components/Lesson.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Checkout,
+    Lesson
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
