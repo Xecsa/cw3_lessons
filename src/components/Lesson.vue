@@ -1,8 +1,6 @@
 <template>
-
-     
                 <!-- Creating 'Lessons' page -->
-                <div v-if="showLesson" class="clearfix" style="display: flex; flex-wrap: wrap; justify-content: flex-start;" >
+                <div class="clearfix" style="display: flex; flex-wrap: wrap; justify-content: flex-start;" >
 
                 <!-- Sorting section -->
                 <div class="sort-section" style="display: flex; flex-wrap: wrap; justify-content: space-between; width: 100%; ">
@@ -11,22 +9,22 @@
                     <!--Sort by Subject-->
                     <div class="sort-options">
                         <div>
-                            <input type="radio" id="sortBySubject" value="subject" v-model="sort.by">
+                            <input type="radio" id="sortBySubject" value="subject" @input="$emit('update:sortBy',$event.target.value)">
                             <label for="sortBySubject">Subject</label>
                         </div>
                         <!--Sort by Location-->
                         <div>
-                            <input type="radio" id="sortByLocation" value="location" v-model="sort.by">
+                            <input type="radio" id="sortByLocation" value="location" @input="$emit('update:sortBy', $event.target.value)">
                             <label for="sortByLocation">Location</label>
                         </div>
                         <!-- Sort by Price -->
                         <div>
-                            <input type="radio" id="sortByPrice" value="price" v-model="sort.by">
+                            <input type="radio" id="sortByPrice" value="price" @input="$emit('update:sortBy',$event.target.value)">
                             <label for="sortByPrice">Price</label>
                         </div>
                         <!-- Sort by Availability-->
                         <div>
-                            <input type="radio" id="sortByAvailability" value="availability" v-model="sort.by">
+                            <input type="radio" id="sortByAvailability" value="availability" @input="$emit('update:sortBy',$event.target.value)">
                             <label for="sortByAvailability">Availability</label>
                         </div>
                     </div>
@@ -35,11 +33,11 @@
                     <label>Order:</label>
                     <div class="sort-options" >
                         <div>
-                            <input type="radio" id="ascending" value="asc" v-model="sort.order">
+                            <input type="radio" id="ascending" value="asc" @input="$emit('update:sortOrder',$event.target.value)">
                             <label for="ascending">Ascending</label>
                         </div>
                         <div>
-                            <input type="radio" id="descending" value="desc" v-model="sort.order">
+                            <input type="radio" id="descending" value="desc"  @input="$emit('update:sortOrder',$event.target.value)">
                             <label for="descending">Descending</label>
                         </div>
                     </div>
@@ -49,7 +47,6 @@
                      <!--Displaying lessons-->                           
                     <div v-for="lesson in lessons" :key="lesson.id" class="lesson-card">
 
-                        <!-- Lesson details -->
                         <div id="details">
                             <!-- Lesson information -->
                             <div id="lesson-details">
@@ -84,7 +81,7 @@
                                 </div>
 
                                 <!-- 'add to cart' button-->
-                                <button class="cart-button" v-on:click="addToCart(lesson)" v-bind:disabled="!canAddToCart(lesson)">
+                                <button class="cart-button" v-on:click="$emit('add-to-cart',lesson)" v-bind:disabled="!canAddToCart(lesson)">
                                             Add to cart
                                 </button>
 
@@ -119,10 +116,21 @@
 export default {
   name: 'lesson-component',
   props: {
-  }
+    canAddToCart: {type: Function, required: true},
+    sortOrder: {type: String, required: true},
+    sortBy: {type: String, required: true},
+    cartCount: {type: Function, required: true},
+    lessons: {type: Array, required: true}
+  },
+  data(){
+    return {
+         //Computed property for displaying available space
+        computedDisplaySpace: function () {
+        return this.lessons.map(lesson => {
+        const countInCart = this.cartCount(lesson._id);
+        return lesson.displaySpace - countInCart;
+});
+    }
+  }}
 }
 </script>
-
-<!-- Add "scoped" attribute to lim
-<style scoped>
-</style>
